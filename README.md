@@ -33,13 +33,13 @@ nmap -p 8080 -Pn 10.48.135.225
 
 Result: Port 8080/tcp is open and is running a web (http-proxy) service.
 
-![Nmap scan shows port 8080 is open](screenshots/01-nmap-scan.png)
+![Nmap scan shows port 8080 is open](01-nmap-scan.png)
 
 ### Step 2: Look at the Website
 
 Next, open the website in a browser at `http://10.48.135.225:8080` to see what it looks like.
 
-![The Byte Lotus hotel website](screenshots/02-website.png)
+![The Byte Lotus hotel website](02-website.png)
 
 ### Step 3: Find Hidden Folders with Gobuster
 
@@ -51,13 +51,13 @@ gobuster dir -u http://10.48.135.225:8080 -w /usr/share/wordlists/dirb/common.tx
 
 Result: A file called `.git/HEAD` is found (Status 200). This means a Git folder was left on the web server by mistake.
 
-![Gobuster finds the exposed .git/HEAD file](screenshots/03-gobuster.png)
+![Gobuster finds the exposed .git/HEAD file](03-gobuster.png)
 
 ### Step 4: Check the .git Folder
 
 Opening `http://10.48.135.225:8080/.git/` in the browser shows that folder listing is turned on. This means all the files inside `.git` can be seen and downloaded.
 
-![Folder listing of the exposed .git folder](screenshots/04-git-listing.png)
+![Folder listing of the exposed .git folder](04-git-listing.png)
 
 ### Step 5: Download the .git Folder with wget
 
@@ -71,7 +71,7 @@ wget -r -np -nH -R "index.html*" http://10.48.135.225:8080/.git/
 
 Result: 46 files (32 KB) are downloaded. The full `.git` folder is now saved on the attacker machine.
 
-![wget downloads the exposed .git folder](screenshots/05-wget-dump.png)
+![wget downloads the exposed .git folder](05-wget-dump.png)
 
 ### Step 6: Get the Source Code Back
 
@@ -85,9 +85,9 @@ git checkout .
 
 There is one commit: "initial Byte Lotus guest platform". Running `git checkout` brings back 3 files: `README.md`, `app.js`, and `index.html`.
 
-![git status and git log show the commit history](screenshots/06-git-log.png)
+![git status and git log show the commit history](06-git-log.png)
 
-![git checkout brings back the source code files](screenshots/07-git-checkout.png)
+![git checkout brings back the source code files](07-git-checkout.png)
 
 ### Step 7: Find the Flag
 
@@ -97,9 +97,9 @@ The `README.md` file is opened and it has a flag that should have been removed b
 cat README.md
 ```
 
-![The flag is found inside README.md](screenshots/08-flag-found.png)
+![The flag is found inside README.md](08-flag-found.png)
 
-![The flag is submitted and marked correct on TryHackMe](screenshots/09-flag-correct.png)
+![The flag is submitted and marked correct on TryHackMe](09-flag-correct.png)
 
 ## 4. Flag
 
